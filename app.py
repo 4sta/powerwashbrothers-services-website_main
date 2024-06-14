@@ -1,6 +1,6 @@
 from flask import Flask  #from moduel importing Flask class
 
-app = Flask(__name__)  #creating a Flusk App
+app = Flask(__name__)  #creating Flusk App
 
 
 @app.route("/")   
@@ -9,4 +9,4 @@ def power_wash():
 
 
 if __name__ == "__main__":
-  app.run(host='0.0.0.0', debug=True)  #debug to update changes
+  app.run(host='0.0.0.0', debug=True)  #debug= True to update changes live
