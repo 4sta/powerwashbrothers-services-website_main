@@ -1,11 +1,11 @@
-from flask import Flask  #from moduel importing Flask class
+from flask import Flask, render_template   #from moduel importing Flask class
 
 app = Flask(__name__)  #creating Flusk App
 
 
 @app.route("/")   
 def power_wash():
-  return "Power Wash Website."
+  return render_template('homepage.html')
 
 
 if __name__ == "__main__":
