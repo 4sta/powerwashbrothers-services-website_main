@@ -2,65 +2,40 @@
 <html>
   <head>
     <title>PowerWashBrothers</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <!-- Bootstrep link to a css file with  pre config styles-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+   
     <style>
-      h1 {
-        font-size: 50px;
-        font-family: fantasy;
-        font-weight: bold;
-        color:rgb(40, 114, 230);
-        text-align: center;
-      }
-
       #homepage_banner{
         width: 100%;
-        height: 310px;
+        height: 360px;
         object-fit: cover;
       }
-      
-      h2 {
-        font-size: 30px;
-        font-family: "Gill Sans", sans-serif;
-        font-weight: bold;
-        color:rgbrgb(70, 70, 70);
-        text-align: center;
-      }
-
-      p{
-        font-family: Roboto;
-        color:rgb(0,0,0);  
-      }
-
-      #container {
-        max-width: 900px;
-        margin: 0 auto 0 auto;
-      }
-      
-      .contactbutton{
-        text-align: center;
-        display: block;
-        margin: 0 auto;
-        font-size: 25px;
-        color:rgb(255, 255, 255);
-        background: rgb(40, 114, 230);
-      }
-      
     </style>
   </head>
 
   <body>
-    <div id= "container">
-      <h1>Power Wash Brothers</h1>
-      <img id="homepage_banner" src="static/homepagebanner.jpg" alt="Power Wash Brothers Banner">
-      <h2>Who We Are?</h2>
-      <hr>
+    <div class="container">
       <p></p>
-      <p>We are a team led by two brothers, united not only by family ties but also by our shared passion and extensive experience in the industry. With a combined experience of over 10 years, we have honed our skills to provide top-notch services. Our journey began with a simple mission: to deliver quality and excellence in every project we undertake. Today, we continue to uphold these values, ensuring that each client receives the personalized attention and professional service they deserve.</p>
-      <h2>Current Services</h2>
-      <hr>
+      <h1 class="text-center">Power Wash Brothers</h1>
       <p></p>
-      <p>IN PROGRESS Our Services:</p>
-      <h2>Any more questions? We're here to help!</h2>
-      <button class ="contactbutton">Contact Us!</button>
+      <img class="img-fluid" id="homepage_banner" src="static/homepagebanner.jpg" alt="Power Wash Brothers Banner">
+      <p></p>
+      <h2 class="text-center">Who We Are?</h2>
+      <hr>
+      <p class="lead">We are a team led by two brothers, united not only by family ties but also by our shared passion and extensive experience in the industry. With a combined experience of over 10 years, we have honed our skills to provide top-notch services. Our journey began with a simple mission: to deliver quality and excellence in every project we undertake. Today, we continue to uphold these values, ensuring that each client receives the personalized attention and professional service they deserve.</p>
+      <h2 class="text-center">Current Services</h2>
+      <hr>
+      <p class="lead">IN PROGRESS Our Services:</p>
+      <h2 class="text-center">Any more questions? We're here to help!</h2>
+      <div class="d-grid gap-2 col-6 mx-auto mt-5 mb-5">
+        <button class="btn btn-primary">Contact Us!</button>  
+      </div>
+      <hr>
+      <p style=text-align:center>© 2024 Power Wash Brothers.All rights reserved</p> 
     </div>
   </body>                                
 </html>
