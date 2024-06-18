@@ -15,25 +15,27 @@
         width: 100%;
         height: 360px;
         object-fit: cover;
+        margin-bottom:60px;
       }
     </style>
   </head>
 
   <body>
+    {% include 'navbar.html' %}
+    <img class="img-fluid" id="homepage_banner" src="static/home_banner.png" alt="Power Wash Brothers Banner">
     <div class="container">
       <p></p>
-      <h1 class="text-center">Power Wash Brothers</h1>
-      <p></p>
-      <img class="img-fluid" id="homepage_banner" src="static/homepagebanner.jpg" alt="Power Wash Brothers Banner">
-      <p></p>
-      <h2 class="text-center" style="margin-bottom: 30px;margin-top: 30px;">Who We Are?</h2>
-      <p class="lead">We are a team led by two brothers, united not only by family ties but also by our shared passion 
-        and extensive experience in the industry. With a combined experience of over 10 years, we have honed our skills 
-        to provide top-notch services. Our journey began with a simple mission: to deliver quality and excellence in 
-        every project we undertake. Today, we continue to uphold these values, ensuring that each client receives the 
-        personalized attention and professional service they deserve.</p>
+      <h2 class="text-center" style="margin-bottom: 70px;margin-top: 10px;">Welcome to Power Wash Brothers!</h2>
+      <div class=row style=margin-bottom:120px>
+        <div class= col-md-6>
+          <img src="static/homepagefoto.jpg" style='height:400px;border-radius:5px;'>	
+        </div>  
+        <div class= col-md-6>
+        <p class="lead"> We're thrilled to have you explore our world of professional pressure washing services. With over a decade of expertise brought by our founding brothers, we are dedicated to revitalizing homes and businesses with precision and care. From restoring the beauty of residential properties to maintaining pristine and safe commercial environments, we’re here to make a noticeable difference. Dive into our site to discover how we can enhance your property’s appeal and protect your investment. Thank you for choosing Power Wash Brothers—where your satisfaction is our top priority!  we’re here to make a noticeable difference. Dive into our site to discover how we can enhance your property’s appeal and protect your investment. Thank you for choosing Power Wash Brothers—where your satisfaction is our top priority!</p>
+        </div> 
+      </div>
       <h2 class="text-center" style="margin-bottom: 60px;margin-top: 30px;">Current Services</h2>
-        <div>
+        <div style=margin-bottom:100px>
           {% for service in services %}
              {% include 'services.html' %} 
           {% endfor %}
@@ -42,8 +44,7 @@
       <div class="d-grid gap-2 col-6 mx-auto mt-5 mb-5">
         <button class="btn btn-primary">Contact Us!</button>  
       </div>
-      <hr>
-        <p style=text-align:center>© 2024  Power Wash Brothers. All rights reserved.</p> 
+       {% include 'footer.html' %} 
       </div>
     </div>
   </body>                                

@@ -2,7 +2,6 @@ from flask import Flask, render_template, jsonify  #from moduel importing Flask 
 
 app = Flask(__name__)  #creating Flusk App
 
-
 SERVICES = [{
     'id': 1,
     'title': 'Roof Pressure Washing',
@@ -32,13 +31,23 @@ SERVICES = [{
 
 @app.route("/")
 def power_wash():
-  return render_template('homepage.html', services=SERVICES)
+    return render_template('homepage.html', services=SERVICES)
+
+
+@app.route("/about")
+def about_us():
+    return render_template('about.html')
+
+
+@app.route("/faqs")
+def faqs():
+    return render_template('faqs.html')
 
 
 @app.route("/api/services")
 def list_servises():
-  return jsonify(SERVICES)  #abruf der webseite in json format (json API)
+    return jsonify(SERVICES)  #abruf der webseite in json format (json API)
 
 
 if __name__ == "__main__":
-  app.run(host='0.0.0.0', debug=True)  #debug= True to update changes live
+    app.run(host='0.0.0.0', debug=True)  #debug= True to update changes live
