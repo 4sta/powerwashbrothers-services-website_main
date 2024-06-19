@@ -6,7 +6,7 @@ SERVICES = [{
     'id': 1,
     'title': 'Roof Pressure Washing',
     'description':
-    ' We provide roof pressure washing services for residential and commercial properties.',
+    ' We provide expert roof cleaning services using high-pressure washers designed for both residential and commercial properties. Our process not only rejuvenates your roof´s appearance but also prevents long-term damage by removing build-ups of moss, dirt, and debris',
     'price': ' From $250'
 }, {
     'id': 2,
@@ -18,7 +18,7 @@ SERVICES = [{
     'id': 3,
     'title': 'House Walls and Windows Cleaning',
     'description':
-    ' We provide thorough cleaning for your home’s exterior walls and windows, enhancing your property’s curb appeal and maintaining its condition.',
+    ' We offer professional roof cleaning services for residential and commercial properties, effectively removing moss, dirt, and debris to enhance appearance and prevent damage.',
     'price': ' From $150'
 }, {
     'id': 4,
