@@ -1,3 +1,4 @@
 #requirements needet for deployment through render.com
 Flask
 gunicorn
+psycopg2
