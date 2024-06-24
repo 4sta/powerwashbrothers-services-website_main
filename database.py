@@ -1,30 +1,56 @@
 import os
-from sqlalchemy import create_engine
+import psycopg2
 
 
-username = 'root'
-password = 'Strongpass!'
-database = 'website'
-host = '35.234.97.3'
-port = '3306' 
+# connecting to datab
+def get_services_db():
+  
+    db_conn = psycopg2.connect(os.environ['DATABASE_URL'])
+    cursor = db_conn.cursor()
+
+    # getting services from database
+    cursor.execute(
+        "SELECT id, title, information, important, price FROM services")
+    services = cursor.fetchall()
+
+    # closed cursor and connection
+    cursor.close()
+    db_conn.close()
+
+    # list
+    services_list = []
+    for service in services:
+        service_dict = {
+            'id': service[0],
+            'title': service[1],
+            'information': service[2],
+            'important': service[3],
+            'price': service[4]
+        }
+        services_list.append(service_dict)
+
+    return services_list
 
 
-ssl_ca = os.getenv('SSL_CA_PATH')     
-ssl_cert = os.getenv('SSL_CERT_PATH')  
-ssl_key = os.getenv('SSL_KEY_PATH')   
 
-
-if not all([ssl_ca, ssl_cert, ssl_key]):
-    print("Missing SSL configurations in environment variables")
-    exit()
-
-
-connection_string = f"mysql+pymysql://{username}:{password}@{host}:{port}/{database}?ssl_ca={ssl_ca}&ssl_cert={ssl_cert}&ssl_key={ssl_key}"
-engine = create_engine(connection_string)
-
-
-try:
-    with engine.connect() as connection:
-        print("Successfully connected to the database!")
-except Exception as e:
-    print(f"Connection Error: {e}")
+def get_service_db(id):
+    try:
+        with psycopg2.connect(os.environ['DATABASE_URL']) as conn:
+            with conn.cursor() as cursor:
+                cursor.execute(
+                    "SELECT id, title, information, important, price FROM services WHERE id = %s",
+                    (id,))
+                service = cursor.fetchone()
+                if service:
+                    service_dict = {
+                        'id': service[0],
+                        'title': service[1],
+                        'information': service[2],
+                        'important': service[3],
+                        'price': service[4]
+                    }
+                    return service_dict
+                return None
+    except psycopg2.Error as e:
+        print(f"Database error: {e}")
+        return None

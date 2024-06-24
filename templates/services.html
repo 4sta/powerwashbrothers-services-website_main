@@ -1,16 +1,13 @@
-<div class ="row" style=margin-bottom:25px>
-   <div class="col-md-10 col-12">
-     <h4>{{service['title']}}</h4>
-     <div>
-       <b>Description:</b>{{service ['description']}}
-     </div>
-     <div >
-       <b>Price:</b>{{service ['price']}}
-     </div>
-   </div>
-   <div class="col-md-2 col-12 d-flex align-items-center">
-       <button style= "margin-top:8px;" type="button" class="btn btn-primary">Details</button>
-   </div>
-   <p></p>
-   <hr>
-</div> 
+<div class="row" style="margin-bottom: 25px;">
+    <div class="col-md-10 col-12">
+        <h4>{{ service['title'] }}</h4>
+        <div>
+            <b>Description:</b> {{ service['information'] }}
+        </div>
+    </div>
+    <div class="col-md-2 col-12 d-flex align-items-center">
+        <a href="/service/{{ service['id'] }}" class="btn btn-primary" style="margin-top:8px;">Details</a>
+    </div>
+  <p></p> 
+  <hr>
+</div>
