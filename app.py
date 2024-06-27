@@ -1,5 +1,5 @@
 from flask import Flask, render_template, jsonify, abort, request, redirect, url_for
-from database import get_services_db, get_service_db, save_order_to_db
+from database import get_services_db, get_service_db, save_order_to_db, get_reviews
 
 app = Flask(__name__)
 
@@ -18,6 +18,12 @@ def about_us():
 @app.route("/faqs")
 def faqs():
     return render_template('faqs.html')
+
+
+@app.route("/reviews")
+def reviews():
+    reviews = get_reviews()
+    return render_template('reviews.html', reviews=reviews)
 
 
 @app.route("/api/services")

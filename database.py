@@ -74,3 +74,31 @@ def save_order_to_db(full_name, email, tel, service_type, work_object_details, r
         conn.close()
     except psycopg2.Error as e:
         print(f"Database error: {e}")
+
+
+def get_reviews():
+    try:
+        conn = psycopg2.connect(os.environ['DATABASE_URL'])
+        cursor = conn.cursor()
+        cursor.execute("SELECT id, image_url, caption FROM reviews")
+        reviews = cursor.fetchall()
+
+        reviews_list = []
+        for review in reviews:
+            review_dict = {
+                'id': review[0],
+                'image_url': review[1],
+                'caption': review[2]
+            }
+            reviews_list.append(review_dict)
+
+        cursor.close()
+        conn.close()
+
+        return reviews_list
+    except psycopg2.Error as e:
+        print(f"Database error: {e}")
+        return []
+    except Exception as e:
+        print(f"Unexpected error: {e}")
+        return []
