@@ -1,37 +1,41 @@
 import os
 import psycopg2
 
+# connection to the database 
 
-# connecting to datab
 def get_services_db():
+    try:
+        db_conn = psycopg2.connect(os.environ['DATABASE_URL'])
+        cursor = db_conn.cursor()
+
+    
+        cursor.execute(
+            "SELECT id, title, information, important, price FROM services")
+        services = cursor.fetchall()
+
   
-    db_conn = psycopg2.connect(os.environ['DATABASE_URL'])
-    cursor = db_conn.cursor()
+        cursor.close()
+        db_conn.close()
 
-    # getting services from database
-    cursor.execute(
-        "SELECT id, title, information, important, price FROM services")
-    services = cursor.fetchall()
+   
+        services_list = []
+        for service in services:
+            service_dict = {
+                'id': service[0],
+                'title': service[1],
+                'information': service[2],
+                'important': service[3],
+                'price': service[4]
+            }
+            services_list.append(service_dict)
 
-    # closed cursor and connection
-    cursor.close()
-    db_conn.close()
-
-    # list
-    services_list = []
-    for service in services:
-        service_dict = {
-            'id': service[0],
-            'title': service[1],
-            'information': service[2],
-            'important': service[3],
-            'price': service[4]
-        }
-        services_list.append(service_dict)
-
-    return services_list
+        return services_list
+    except psycopg2.Error as e:
+        print(f"Database error: {e}")
+        return []
 
 
+# connection based on the service id
 
 def get_service_db(id):
     try:
@@ -54,3 +58,19 @@ def get_service_db(id):
     except psycopg2.Error as e:
         print(f"Database error: {e}")
         return None
+
+
+# function to send orders to the database
+def save_order_to_db(full_name, email, tel, service_type, work_object_details, remark):
+    try:
+        conn = psycopg2.connect(os.environ['DATABASE_URL'])
+        cursor = conn.cursor()
+        cursor.execute("""
+            INSERT INTO orders (full_name, email, tel, service_type, work_object_details, remark)
+            VALUES (%s, %s, %s, %s, %s, %s)
+        """, (full_name, email, tel, service_type, work_object_details, remark))
+        conn.commit()
+        cursor.close()
+        conn.close()
+    except psycopg2.Error as e:
+        print(f"Database error: {e}")

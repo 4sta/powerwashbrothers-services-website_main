@@ -33,9 +33,9 @@
         <p><b>Description:</b> {{ service['information'] }}</p>
         <p><b>Important:</b> {{ service['important'] }}</p>
         <p><b>Price:</b> {{ service['price'] }}</p>
-        <div class="d-grid gap-2 col-6 mx-auto mt-5 mb-5">
-          <a class="btn btn-primary" href="mailto:power-wash-brothers-order@lalala.dededede?subject=Calculating%20and%20ordering%20the%20service.&body=!!!!%20PLEASE%20FILL%20OUT%20THE%20FORM!!!!!!!!!!%0D%0A%0D%0AFull%20Name%3A%0D%0A%0D%0ATel%3A%0D%0A%0D%0AService%20Type%3A%0D%0A%0D%0AWork%20Object%20Details%3A%0D%0A%0D%0AYour%20Remark%3A%0D%0A">Order Now!</a>  
-        </div>
+        
+         {% include 'service_order_form.html' %}
+      
     </div>
     <p></p>
     {% include 'footer.html' %} 

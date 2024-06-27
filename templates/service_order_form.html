@@ -1,0 +1,29 @@
+<div class="container mt-5 lead">
+    <form action="/service/{{ service['id'] }}/order" method="POST">
+        <div class="mb-3">
+            <label for="fullName" class="form-label">Full Name:</label>
+            <input type="text" class="form-control" id="fullName" name="fullName" placeholder="Bob Robertson" required>
+        </div>
+        <div class="mb-3">
+            <label for="email" class="form-label">Email:</label>
+            <input type="email" class="form-control" id="email" name="email" placeholder="youremail.@lalala.de" required>
+        </div>
+        <div class="mb-3">
+            <label for="tel" class="form-label">Tel: (optional)</label>
+            <input type="tel" class="form-control" id="tel" name="tel" placeholder="+ 4 444 444 444">
+        </div>
+        <div class="mb-3">
+            <label for="serviceType" class="form-label">Service Type:</label>
+            <input type="text" class="form-control" id="serviceType" name="serviceType" placeholder="{{ service['title'] }}" required>
+        </div>
+        <div class="mb-3">
+            <label for="workObjectDetails" class="form-label">Work Object Details:</label>
+            <textarea class="form-control" id="workObjectDetails" name="workObjectDetails" rows="3" placeholder="Provide details about the work object, e.g., 50m² material etc." required></textarea>
+        </div>
+        <div class="mb-3">
+            <label for="remark" class="form-label">Your Remark: (optional)</label>
+            <textarea class="form-control" id="remark" name="remark" rows="3" placeholder="Enter any additional remarks"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
