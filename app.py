@@ -33,8 +33,7 @@ def send_email(to, subject, template):
             sender=app.config['MAIL_DEFAULT_SENDER']
         )
         mail.send(msg)
-
-
+ 
 @app.route("/")
 def power_wash():
     services = get_services_db()
