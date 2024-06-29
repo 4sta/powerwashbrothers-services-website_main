@@ -1,7 +1,38 @@
+import os
 from flask import Flask, render_template, jsonify, abort, request, redirect, url_for
 from database import get_services_db, get_service_db, save_order_to_db, get_reviews
+from flask_mail import Mail, Message
+from dotenv import load_dotenv
+from email_templates import admin_email_template, user_email_template
+
 
 app = Flask(__name__)
+
+
+# gain access to .env file
+load_dotenv()
+
+
+#config settings for Flask-Mail
+app.config['MAIL_SERVER'] = os.environ.get('MAIL_SERVER')
+app.config['MAIL_PORT'] = int(os.environ.get('MAIL_PORT', 587))
+app.config['MAIL_USE_TLS'] = os.environ.get('MAIL_USE_TLS') == 'True'
+app.config['MAIL_USERNAME'] = os.environ.get('MAIL_USERNAME')
+app.config['MAIL_PASSWORD'] = os.environ.get('MAIL_PASSWORD')
+app.config['MAIL_DEFAULT_SENDER'] = os.environ.get('MAIL_DEFAULT_SENDER')
+
+
+mail = Mail(app)
+
+
+def send_email(to, subject, template):
+        msg = Message(
+            subject,
+            recipients=[to],
+            html=template,
+            sender=app.config['MAIL_DEFAULT_SENDER']
+        )
+        mail.send(msg)
 
 
 @app.route("/")
@@ -47,6 +78,13 @@ def order_service(service_id):
     save_order_to_db(order_data['fullName'], order_data['email'],
                      order_data.get('tel'), order_data['serviceType'],
                      order_data['workObjectDetails'], order_data.get('remark'))
+
+    # Sending email to admin
+    send_email(os.environ.get('ADMIN_EMAIL'), 'New Order Received', admin_email_template(order_data))
+
+    # Sending submit approval email to customer
+    send_email(order_data['email'], 'Order Confirmation', user_email_template(order_data))
+
     return redirect(url_for('order_success'))
 
 

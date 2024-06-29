@@ -4,3 +4,4 @@ gunicorn==22.0.0
 psycopg2==2.9.6
 pytest 
 python-dotenv==1.0.1
+Flask-Mail
