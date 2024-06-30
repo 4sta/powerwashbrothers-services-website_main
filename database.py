@@ -1,6 +1,11 @@
 import os
 import psycopg2
 from dotenv import load_dotenv
+import logging
+
+# Configure logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
 
 # Load environment variables from .env file
 load_dotenv()
@@ -27,9 +32,10 @@ def get_services_db():
             }
             services_list.append(service_dict)
 
+        logger.info("Fetched services from database")
         return services_list
     except psycopg2.Error as e:
-        print(f"Database error: {e}")
+        logger.error(f"Database error: {e}")
         return []
 
 # Function to get a specific service by its ID from the database
@@ -49,10 +55,12 @@ def get_service_db(id):
                         'important': service[3],
                         'price': service[4]
                     }
+                    logger.info(f"Fetched service with ID: {id} from database")
                     return service_dict
+                logger.warning(f"Service with ID: {id} not found in database")
                 return None
     except psycopg2.Error as e:
-        print(f"Database error: {e}")
+        logger.error(f"Database error: {e}")
         return None
 
 # Function to save an order to the database
@@ -68,8 +76,9 @@ def save_order_to_db(full_name, email, tel, service_type, work_object_details, r
         conn.commit()
         cursor.close()
         conn.close()
+        logger.info(f"Saved order for {full_name} into the database")
     except psycopg2.Error as e:
-        print(f"Database error: {e}")
+        logger.error(f"Database error: {e}")
 
 # Function to get reviews from the database
 def get_reviews():
@@ -91,10 +100,11 @@ def get_reviews():
         cursor.close()
         conn.close()
 
+        logger.info("Fetched reviews from database")
         return reviews_list
     except psycopg2.Error as e:
-        print(f"Database error: {e}")
+        logger.error(f"Database error: {e}")
         return []
     except Exception as e:
-        print(f"Unexpected error: {e}")
+        logger.error(f"Unexpected error: {e}")
         return []
