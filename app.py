@@ -5,9 +5,10 @@ from database import get_services_db, get_service_db, save_order_to_db, get_revi
 from flask_mail import Mail, Message
 from dotenv import load_dotenv
 from email_templates import admin_email_template, user_email_template
+from logging_config import setup_logging
 
 # Configuring logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+setup_logging()
 logger = logging.getLogger(__name__)
 
 app = Flask(__name__)

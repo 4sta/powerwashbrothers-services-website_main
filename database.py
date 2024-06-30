@@ -2,9 +2,13 @@ import os
 import psycopg2
 from dotenv import load_dotenv
 import logging
+from logging_config import setup_logging  
 
 # Configure logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+setup_logging() 
+
+logger = logging.getLogger(__name__)
+
 logger = logging.getLogger(__name__)
 
 # Load environment variables from .env file
