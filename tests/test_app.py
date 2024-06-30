@@ -51,7 +51,8 @@ def test_service_detail(client):
 def test_send_email(mocker):
     mock_send = mocker.patch('flask_mail.Mail.send')
 
-    send_email('test@example.com', 'Test Subject', '<p>Test Body</p>')
+    with flask_app.app_context():  # Using the application context
+        send_email('test@example.com', 'Test Subject', '<p>Test Body</p>')
 
     mock_send.assert_called_once()
     sent_message = mock_send.call_args[0][0]
