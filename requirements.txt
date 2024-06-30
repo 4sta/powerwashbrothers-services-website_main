@@ -5,3 +5,4 @@ psycopg2==2.9.6
 pytest
 python-dotenv==1.0.1
 flask_mail
+pytest-mock
