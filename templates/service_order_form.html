@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Order Form</title>
-    
     <!-- validation JavaScript for the user side -->
     <script>
         function validateForm() {
@@ -39,7 +38,12 @@
 
         function validatePhone(phone) {
             var re = /^\+?\d{4,13}$/;
-            return re.test(phone);
+              return re.test(phone);
+        }
+
+        // reCAPTCHA callback 
+        function onSubmit(token) {
+            document.getElementById("orderForm").submit();
         }
     </script>
 </head>
@@ -70,8 +74,17 @@
                 <label for="remark" class="form-label">Your Remark: (optional)</label>
                 <textarea class="form-control" id="remark" name="remark" rows="3" placeholder="Enter any additional remarks"></textarea>
             </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button
+                class="g-recaptcha btn btn-primary"
+                data-sitekey="{{ config.RECAPTCHA_SITE_KEY }}"
+                data-callback='onSubmit'
+                data-action='submit'>
+                Submit
+            </button>
         </form>
     </div>
+
+    <!-- reCAPTCHA script -->
+    <script src="https://www.google.com/recaptcha/enterprise.js?render={{ config.RECAPTCHA_SITE_KEY }}"></script>
 </body>
-</html>
+ </html>

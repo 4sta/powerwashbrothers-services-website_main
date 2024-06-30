@@ -1,3 +1,4 @@
+import requests
 import logging
 import os
 from flask import Flask, render_template, jsonify, abort, request, redirect, url_for
@@ -25,6 +26,18 @@ app.config['MAIL_PASSWORD'] = os.environ.get('MAIL_PASSWORD')
 app.config['MAIL_DEFAULT_SENDER'] = os.environ.get('MAIL_DEFAULT_SENDER')
 
 mail = Mail(app)
+
+
+def verify_recaptcha(token):
+    secret_key = os.environ.get('RECAPTCHA_SECRET_KEY')
+    payload = {
+        'secret': secret_key,
+        'response': token
+    }
+    response = requests.post('https://www.google.com/recaptcha/api/siteverify', data=payload)
+    result = response.json()
+    return result.get('success', False)
+
 
 def send_email(to, subject, template):
     try:
@@ -79,6 +92,10 @@ def service_detail(service_id):
 
 @app.route("/service/<int:service_id>/order", methods=["POST"])
 def order_service(service_id):
+    token = request.form.get('g-recaptcha-response')
+    if not verify_recaptcha(token):
+        abort(400, description="Invalid reCAPTCHA. Please try again.")
+
     order_data = request.form.to_dict()
     save_order_to_db(order_data['fullName'], order_data['email'],
                      order_data.get('tel'), order_data['serviceType'],

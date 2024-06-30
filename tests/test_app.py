@@ -1,7 +1,9 @@
 import pytest
-from app import app as flask_app, send_email, admin_email_template, user_email_template
+from app import app as flask_app, send_email, admin_email_template, user_email_template, verify_recaptcha
 from flask_mail import Mail, Message
 import os
+import requests
+from unittest.mock import patch
 
 # This fixture provides a test client for our Flask app
 @pytest.fixture
@@ -59,6 +61,21 @@ def test_send_email(mocker):
     assert sent_message.subject == 'Test Subject'
     assert sent_message.recipients == ['test@example.com']
     assert sent_message.html == '<p>Test Body</p>'
+
+# Test for reCAPTCHA verification
+def test_verify_recaptcha_success():
+    with patch('requests.post') as mock_post:
+        mock_post.return_value.json.return_value = {'success': True}
+        token = 'test_token'
+        result = verify_recaptcha(token)
+        assert result
+
+def test_verify_recaptcha_failure():
+    with patch('requests.post') as mock_post:
+        mock_post.return_value.json.return_value = {'success': False}
+        token = 'test_token'
+        result = verify_recaptcha(token)
+        assert not result
 
 # Test for order service (if needed)
 # def test_order_service(client, mocker):
