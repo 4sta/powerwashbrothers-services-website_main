@@ -1,5 +1,7 @@
 import pytest
-from app import app as flask_app
+from app import app as flask_app, send_email, admin_email_template, user_email_template
+from flask_mail import Mail, Message
+import os
 
 # This fixture provides a test client for our Flask app
 @pytest.fixture
@@ -44,3 +46,54 @@ def test_service_detail(client):
         assert b"Description:" in response.data
     else:
         assert response.status_code == 404
+
+# Test for email sending
+def test_send_email(mocker):
+    mock_send = mocker.patch('flask_mail.Mail.send')
+
+    send_email('test@example.com', 'Test Subject', '<p>Test Body</p>')
+
+    mock_send.assert_called_once()
+    sent_message = mock_send.call_args[0][0]
+    assert sent_message.subject == 'Test Subject'
+    assert sent_message.recipients == ['test@example.com']
+    assert sent_message.html == '<p>Test Body</p>'
+
+# Test for order service (if needed)
+# def test_order_service(client, mocker):
+#     mock_send_email = mocker.patch('app.send_email')
+#     mock_save_order = mocker.patch('database.save_order_to_db')
+# 
+#     response = client.post('/service/1/order', data={
+#         'fullName': 'Test User',
+#         'email': 'test@example.com',
+#         'tel': '1234567890',
+#         'serviceType': 'Test Service',
+#         'workObjectDetails': 'Test Details',
+#         'remark': 'Test Remark'
+#     })
+# 
+#     assert response.status_code == 302  # checking if the response is a redirect
+#     mock_save_order.assert_called_once_with(
+#         'Test User', 'test@example.com', '1234567890', 'Test Service', 'Test Details', 'Test Remark'
+#     )
+#     mock_send_email.assert_any_call(
+#         'test@example.com', 'Order Confirmation', user_email_template({
+#             'fullName': 'Test User',
+#             'email': 'test@example.com',
+#             'tel': '1234567890',
+#             'serviceType': 'Test Service',
+#             'workObjectDetails': 'Test Details',
+#             'remark': 'Test Remark'
+#         })
+#     )
+#     mock_send_email.assert_any_call(
+#         os.environ.get('ADMIN_EMAIL'), 'New Order Received', admin_email_template({
+#             'fullName': 'Test User',
+#             'email': 'test@example.com',
+#             'tel': '1234567890',
+#             'serviceType': 'Test Service',
+#             'workObjectDetails': 'Test Details',
+#             'remark': 'Test Remark'
+#         })
+#     )
