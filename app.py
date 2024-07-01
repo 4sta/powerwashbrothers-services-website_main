@@ -9,7 +9,8 @@ from email_templates import admin_email_template, user_email_template
 from logging_config import setup_logging
 from validation import validate_order_form  
 
-# Configuring logging
+
+# Configuring logging.
 setup_logging()
 logger = logging.getLogger(__name__)
 
