@@ -25,7 +25,24 @@ jobs:
         pip install -r requirements.txt
 
     - name: Set environment variables
-      run: echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> $GITHUB_ENV
+      run: |
+        echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> $GITHUB_ENV
+        echo "PGDATABASE=${{ secrets.PGDATABASE }}" >> $GITHUB_ENV
+        echo "PGHOST=${{ secrets.PGHOST }}" >> $GITHUB_ENV
+        echo "PGPORT=${{ secrets.PGPORT }}" >> $GITHUB_ENV
+        echo "PGUSER=${{ secrets.PGUSER }}" >> $GITHUB_ENV
+        echo "PGPASSWORD=${{ secrets.PGPASSWORD }}" >> $GITHUB_ENV
+        echo "GOOGLE_APPLICATION_CREDENTIALS=${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}" >> $GITHUB_ENV
+        echo "RECAPTCHA_SITE_KEY=${{ secrets.RECAPTCHA_SITE_KEY }}" >> $GITHUB_ENV
+        echo "RECAPTCHA_SECRET_KEY=${{ secrets.RECAPTCHA_SECRET_KEY }}" >> $GITHUB_ENV
+        echo "GCP_PROJECT_ID=${{ secrets.GCP_PROJECT_ID }}" >> $GITHUB_ENV
+        echo "MAIL_SERVER=${{ secrets.MAIL_SERVER }}" >> $GITHUB_ENV
+        echo "MAIL_PORT=${{ secrets.MAIL_PORT }}" >> $GITHUB_ENV
+        echo "MAIL_USE_TLS=${{ secrets.MAIL_USE_TLS }}" >> $GITHUB_ENV
+        echo "MAIL_USERNAME=${{ secrets.MAIL_USERNAME }}" >> $GITHUB_ENV
+        echo "MAIL_PASSWORD=${{ secrets.MAIL_PASSWORD }}" >> $GITHUB_ENV
+        echo "MAIL_DEFAULT_SENDER=${{ secrets.MAIL_DEFAULT_SENDER }}" >> $GITHUB_ENV
+        echo "ADMIN_EMAIL=${{ secrets.ADMIN_EMAIL }}" >> $GITHUB_ENV
 
     - name: Run tests
       run: |
