@@ -7,6 +7,7 @@ from flask_mail import Mail, Message
 from dotenv import load_dotenv
 from email_templates import admin_email_template, user_email_template
 from logging_config import setup_logging
+from validation import validate_order_form  
 
 # Configuring logging
 setup_logging()
@@ -116,6 +117,11 @@ def order_service(service_id):
         abort(400, description="Invalid reCAPTCHA. Please try again.")
 
     order_data = request.form.to_dict()
+
+    is_valid, error_message = validate_order_form(order_data)  # Validate order form data
+    if not is_valid:
+        abort(400, description=error_message)
+
     save_order_to_db(order_data['fullName'], order_data['email'],
                      order_data.get('tel'), order_data['serviceType'],
                      order_data['workObjectDetails'], order_data.get('remark'))
