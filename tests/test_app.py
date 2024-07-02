@@ -4,6 +4,7 @@ from flask_mail import Mail, Message
 import os
 import requests
 from unittest.mock import patch
+from validation import validate_order_form
 
 # This fixture provides a test client for our Flask app
 @pytest.fixture
@@ -62,7 +63,7 @@ def test_send_email(mocker):
     assert sent_message.recipients == ['test@example.com']
     assert sent_message.html == '<p>Test Body</p>'
 
-# Test for reCAPTCHA verification
+# Test for reCAPTCHA verification success
 def test_verify_recaptcha_success():
     with patch('requests.post') as mock_post:
         mock_post.return_value.json.return_value = {'success': True}
@@ -70,6 +71,7 @@ def test_verify_recaptcha_success():
         result = verify_recaptcha(token)
         assert result
 
+# Test for reCAPTCHA verification failure
 def test_verify_recaptcha_failure():
     with patch('requests.post') as mock_post:
         mock_post.return_value.json.return_value = {'success': False}
@@ -77,11 +79,60 @@ def test_verify_recaptcha_failure():
         result = verify_recaptcha(token)
         assert not result
 
-# Test for order service (if needed)
+# Test for validation of order form data
+def test_validate_order_form_success():
+    data = {
+        'fullName': 'Test User',
+        'email': 'test@example.com',
+        'tel': '1234567890',
+        'serviceType': 'Test Service',
+        'workObjectDetails': 'Test Details'
+    }
+    is_valid, error_message = validate_order_form(data)
+    assert is_valid
+    assert error_message == ""
+
+def test_validate_order_form_missing_field():
+    data = {
+        'fullName': 'Test User',
+        'email': 'test@example.com',
+        'tel': '1234567890',
+        'serviceType': 'Test Service'
+    }
+    is_valid, error_message = validate_order_form(data)
+    assert not is_valid
+    assert error_message == "Field workObjectDetails is required."
+
+def test_validate_order_form_invalid_email():
+    data = {
+        'fullName': 'Test User',
+        'email': 'invalid-email',
+        'tel': '1234567890',
+        'serviceType': 'Test Service',
+        'workObjectDetails': 'Test Details'
+    }
+    is_valid, error_message = validate_order_form(data)
+    assert not is_valid
+    assert error_message == "Invalid email format."
+
+def test_validate_order_form_invalid_phone():
+    data = {
+        'fullName': 'Test User',
+        'email': 'test@example.com',
+        'tel': 'invalid-phone',
+        'serviceType': 'Test Service',
+        'workObjectDetails': 'Test Details'
+    }
+    is_valid, error_message = validate_order_form(data)
+    assert not is_valid
+    assert error_message == "Invalid phone number format."
+
+
+# Test for order service (need fix)
 # def test_order_service(client, mocker):
 #     mock_send_email = mocker.patch('app.send_email')
 #     mock_save_order = mocker.patch('database.save_order_to_db')
-# 
+#
 #     response = client.post('/service/1/order', data={
 #         'fullName': 'Test User',
 #         'email': 'test@example.com',
@@ -90,7 +141,7 @@ def test_verify_recaptcha_failure():
 #         'workObjectDetails': 'Test Details',
 #         'remark': 'Test Remark'
 #     })
-# 
+#
 #     assert response.status_code == 302  # checking if the response is a redirect
 #     mock_save_order.assert_called_once_with(
 #         'Test User', 'test@example.com', '1234567890', 'Test Service', 'Test Details', 'Test Remark'
