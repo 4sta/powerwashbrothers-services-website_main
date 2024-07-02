@@ -43,6 +43,7 @@ jobs:
         echo "MAIL_PASSWORD=${{ secrets.MAIL_PASSWORD }}" >> $GITHUB_ENV
         echo "MAIL_DEFAULT_SENDER=${{ secrets.MAIL_DEFAULT_SENDER }}" >> $GITHUB_ENV
         echo "ADMIN_EMAIL=${{ secrets.ADMIN_EMAIL }}" >> $GITHUB_ENV
+        echo "ADMIN_ROUTE=${{ secrets.ADMIN_ROUTE }}" >> $GITHUB_ENV
 
     - name: Run tests
       run: |
