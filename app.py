@@ -8,9 +8,8 @@ from flask_mail import Mail, Message
 from dotenv import load_dotenv
 from email_templates import user_email_template, admin_email_template
 from logging_config import setup_logging
-from validation import validate_order_form  
-from concurrent.futures import ThreadPoolExecutor 
-
+from validation import validate_order_form
+from concurrent.futures import ThreadPoolExecutor
 
 # Configuring logging.
 setup_logging()
@@ -51,32 +50,38 @@ mail = Mail(app)
 
 executor = ThreadPoolExecutor(max_workers=2)
 
+
 def verify_recaptcha(token):
     secret_key = os.environ.get('RECAPTCHA_SECRET_KEY')
     url = 'https://www.google.com/recaptcha/api/siteverify'
-    params = {
-        'secret': secret_key,
-        'response': token
-    }
+    params = {'secret': secret_key, 'response': token}
     response = requests.post(url, data=params)
     result = response.json()
     return result.get('success', False)
 
+
 def send_email(to, subject, template):
     try:
-        msg = Message(
-            subject,
-            recipients=[to],
-            html=template,
-            sender=app.config['MAIL_DEFAULT_SENDER']
-        )
+        msg = Message(subject,
+                      recipients=[to],
+                      html=template,
+                      sender=app.config['MAIL_DEFAULT_SENDER'])
         mail.send(msg)
         logger.info(f"Email sent to {to} with subject '{subject}'")
     except Exception as e:
-        logger.error(f"Failed to send email to {to} with subject '{subject}'. Error: {e}")
+        logger.error(
+            f"Failed to send email to {to} with subject '{subject}'. Error: {e}"
+        )
+
+
+def send_email_with_context(to, subject, template):
+    with app.app_context():
+        send_email(to, subject, template)
+
 
 def send_email_async(to, subject, template):
-    executor.submit(send_email, to, subject, template)
+    executor.submit(send_email_with_context, to, subject, template)
+
 
 def get_all_orders():
     """Retrieve all orders from the database."""
@@ -88,12 +93,16 @@ def get_all_orders():
     conn.close()
     return orders
 
+
 @app.route("/")
 def power_wash():
     services = get_services_db()
     recaptcha_site_key = os.environ.get('RECAPTCHA_SITE_KEY')
     logger.info("Rendering homepage with services")
-    return render_template('homepage.html', services=services, recaptcha_site_key=recaptcha_site_key)
+    return render_template('homepage.html',
+                           services=services,
+                           recaptcha_site_key=recaptcha_site_key)
+
 
 @app.route("/about")
 def about_us():
@@ -101,18 +110,23 @@ def about_us():
     logger.info("Rendering About Us page")
     return render_template('about.html', recaptcha_site_key=recaptcha_site_key)
 
+
 @app.route("/faqs")
 def faqs():
     recaptcha_site_key = os.environ.get('RECAPTCHA_SITE_KEY')
     logger.info("Rendering FAQs page")
     return render_template('faqs.html', recaptcha_site_key=recaptcha_site_key)
 
+
 @app.route("/reviews")
 def reviews():
     recaptcha_site_key = os.environ.get('RECAPTCHA_SITE_KEY')
     reviews = get_reviews()
     logger.info("Rendering Reviews page")
-    return render_template('reviews.html', reviews=reviews, recaptcha_site_key=recaptcha_site_key)
+    return render_template('reviews.html',
+                           reviews=reviews,
+                           recaptcha_site_key=recaptcha_site_key)
+
 
 @app.route("/api/services")
 def list_services():
@@ -120,16 +134,20 @@ def list_services():
     logger.info("Listing services through API")
     return jsonify(services)
 
+
 @app.route("/service/<int:service_id>")
 def service_detail(service_id):
     recaptcha_site_key = os.environ.get('RECAPTCHA_SITE_KEY')
     service = get_service_db(service_id)
     if service:
         logger.info(f"Rendering details for service ID: {service_id}")
-        return render_template('service_details.html', service=service, recaptcha_site_key=recaptcha_site_key)
+        return render_template('service_details.html',
+                               service=service,
+                               recaptcha_site_key=recaptcha_site_key)
     else:
         logger.warning(f"Service ID: {service_id} not found")
         abort(404)
+
 
 @app.route("/service/<int:service_id>/order", methods=["POST"])
 def order_service(service_id):
@@ -142,7 +160,8 @@ def order_service(service_id):
 
     order_data = request.form.to_dict()
 
-    is_valid, error_message = validate_order_form(order_data)  # Validate order form data
+    is_valid, error_message = validate_order_form(
+        order_data)  # Validate order form data
     if not is_valid:
         abort(400, description=error_message)
 
@@ -151,19 +170,22 @@ def order_service(service_id):
                      order_data['workObjectDetails'], order_data.get('remark'))
 
     # Sending email to admin (Currently not working)
-    #send_email(os.environ.get('ADMIN_EMAIL'), 'New Order Received', admin_email_template(order_data))
+    #send_email(os.environ.get('ADMIN_EMAIL'), 'New Order Received',admin_email_template(order_data))
 
     # Sending submit approval email to customer
-    send_email_async(order_data['email'], 'Order Confirmation', user_email_template(order_data))
+    send_email_async(order_data['email'], 'Order Confirmation',
+                     user_email_template(order_data))
 
     logger.info(f"Order received and emails sent for service ID: {service_id}")
     return redirect(url_for('order_success'))
+
 
 @app.route("/order_success")
 def order_success():
     recaptcha_site_key = os.environ.get('RECAPTCHA_SITE_KEY')
     logger.info("Rendering order success page")
-    return render_template('order_success.html', recaptcha_site_key=recaptcha_site_key)
+    return render_template('order_success.html',
+                           recaptcha_site_key=recaptcha_site_key)
 
 
 # temporaty secrete way to check the orders.
@@ -172,6 +194,7 @@ def admin_orders():
     """Route for admin to view all orders."""
     orders = get_all_orders()
     return render_template('admin_orders.html', orders=orders)
+
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', debug=True)
